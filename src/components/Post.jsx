@@ -4,7 +4,7 @@ import { formatDate } from '../utils/formatDate';
 export default function Post({ post }) {
   const location = useLocation();
   if (!post) return null;
-  
+
   // Determine where "View thread" should navigate
   // If we're already on the parent post page, navigate to this reply's detail page
   // Otherwise, navigate to the parent post
@@ -18,7 +18,7 @@ export default function Post({ post }) {
     // Otherwise, go to the parent post
     return `/posts/${post.parent_id}`;
   };
-  
+
   const viewThreadUrl = getViewThreadUrl();
 
   return (
