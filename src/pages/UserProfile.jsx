@@ -29,8 +29,10 @@ export default function UserProfile() {
       setPosts(data.posts || []);
       setCursor(data.pagination?.cursor);
       setHasNext(data.pagination?.has_next);
-      // Check if current user is following this user
-      // This would need to be added to the API response
+      // Check if current user is following this user (from API response)
+      if (data.user.is_following !== undefined) {
+        setFollowing(data.user.is_following);
+      }
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to load user. Please try again.');
       console.error('Failed to load user:', err);
@@ -96,8 +98,10 @@ export default function UserProfile() {
             {user.description && (
               <p className="text-gray-600 mb-4">{user.description}</p>
             )}
-            <div className="text-sm text-gray-500">
-              <span>{posts.length} {posts.length === 1 ? 'post' : 'posts'}</span>
+            <div className="text-sm text-gray-500 space-x-4">
+              <span>{user.posts_count || posts.length} {user.posts_count === 1 || posts.length === 1 ? 'post' : 'posts'}</span>
+              <span>{user.followers_count || 0} {user.followers_count === 1 ? 'follower' : 'followers'}</span>
+              <span>{user.following_count || 0} following</span>
             </div>
           </div>
           {currentUser && !isOwnProfile && (
