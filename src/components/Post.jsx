@@ -1,8 +1,25 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { formatDate } from '../utils/formatDate';
 
 export default function Post({ post }) {
+  const location = useLocation();
   if (!post) return null;
+  
+  // Determine where "View thread" should navigate
+  // If we're already on the parent post page, navigate to this reply's detail page
+  // Otherwise, navigate to the parent post
+  const getViewThreadUrl = () => {
+    if (!post.parent_id) return null;
+    const currentPostId = location.pathname.match(/\/posts\/(\d+)/)?.[1];
+    // If we're viewing the parent post, and this reply has replies, go to this reply's page
+    if (currentPostId === String(post.parent_id) && post.replies_count > 0) {
+      return `/posts/${post.id}`;
+    }
+    // Otherwise, go to the parent post
+    return `/posts/${post.parent_id}`;
+  };
+  
+  const viewThreadUrl = getViewThreadUrl();
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 mb-4 hover:shadow-lg transition-shadow">
@@ -36,9 +53,9 @@ export default function Post({ post }) {
             <span>Reply</span>
           )}
         </Link>
-        {post.parent_id && (
+        {viewThreadUrl && (
           <Link
-            to={`/posts/${post.parent_id}`}
+            to={viewThreadUrl}
             className="text-blue-600 hover:text-blue-800"
           >
             View thread
