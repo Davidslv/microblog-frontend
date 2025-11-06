@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import PostDetail from './pages/PostDetail';
 import UserProfile from './pages/UserProfile';
+import Settings from './pages/Settings';
 import Navigation from './components/Navigation';
 import Loading from './components/Loading';
 
@@ -52,6 +53,14 @@ function AppRoutes() {
       />
       <Route path="/posts/:id" element={<PostDetail />} />
       <Route path="/users/:id" element={<UserProfile />} />
+      <Route
+        path="/settings"
+        element={
+          <PrivateRoute>
+            <Settings />
+          </PrivateRoute>
+        }
+      />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

@@ -33,6 +33,12 @@ export default function Navigation() {
                 >
                   @{user.username}
                 </Link>
+                <Link
+                  to="/settings"
+                  className="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium"
+                >
+                  Settings
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="bg-red-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-700"
