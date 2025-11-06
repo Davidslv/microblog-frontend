@@ -22,7 +22,7 @@ export default function Post({ post }) {
       </div>
 
       <Link to={`/posts/${post.id}`} className="block">
-        <p className="text-gray-800 mb-3 whitespace-pre-wrap">{post.content}</p>
+        <p className="text-gray-800 mb-3 whitespace-pre-wrap break-words">{post.content}</p>
       </Link>
 
       <div className="flex items-center justify-between text-sm text-gray-500">
