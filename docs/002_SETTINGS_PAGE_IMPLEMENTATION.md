@@ -39,7 +39,7 @@ The Settings page allows authenticated users to manage their account settings, i
 
 ### 3. Account Deletion
 - **Location**: Danger Zone section
-- **Confirmation Flow**: 
+- **Confirmation Flow**:
   1. First click shows "Confirm Delete Account" button
   2. Second click triggers browser confirmation dialog
   3. Final confirmation deletes account
@@ -109,11 +109,11 @@ The Settings page allows authenticated users to manage their account settings, i
 - **API Errors**: Displayed in red error box at top of form
 - **Validation Errors**: Backend returns error messages in `errors` array
 - **Network Errors**: Generic error message shown
-- **Error Format**: 
+- **Error Format**:
   ```javascript
-  err.response?.data?.error || 
-  err.response?.data?.errors?.join(', ') || 
-  err.message || 
+  err.response?.data?.error ||
+  err.response?.data?.errors?.join(', ') ||
+  err.message ||
   'Failed to update settings. Please try again.'
   ```
 
@@ -133,7 +133,7 @@ The Settings page matches the backend's `edit.html.erb` styling:
 
 - **Container**: White rounded card with shadow and border
 - **Form Fields**: Tailwind CSS styling with focus states
-- **Buttons**: 
+- **Buttons**:
   - Update: Blue gradient button with hover effects
   - Cancel: Gray button
   - Delete: Red button in danger zone
@@ -194,11 +194,11 @@ The Settings page matches the backend's `edit.html.erb` styling:
 
 1. **Authentication**: All settings operations require valid JWT token
 2. **Authorization**: Backend validates user can only modify own account
-3. **Password Handling**: 
+3. **Password Handling**:
    - Passwords never stored in component state unnecessarily
    - Only sent to API if user explicitly provides new password
    - Password fields cleared after successful update
-4. **Account Deletion**: 
+4. **Account Deletion**:
    - Double confirmation required (button state + browser dialog)
    - Immediate logout after deletion
    - Page reload ensures all state is cleared
