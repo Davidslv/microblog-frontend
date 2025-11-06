@@ -1,5 +1,12 @@
 # Kamal deployment configuration for frontend
 # This deploys the React frontend as a static site served by Nginx
+#
+# Usage:
+#   export FRONTEND_HOST=yourdomain.com
+#   export VITE_API_URL=https://api.yourdomain.com/api/v1
+#   export DOCKER_USERNAME=your-docker-username
+#   export DOCKER_PASSWORD=your-docker-password
+#   kamal deploy
 
 service: microblog-frontend
 
@@ -8,6 +15,11 @@ image: microblog-frontend
 # Build configuration
 builder:
   arch: amd64
+  dockerfile: Dockerfile
+  context: .
+  # Build args for Vite (embedded at build time)
+  args:
+    VITE_API_URL: <%= ENV.fetch("VITE_API_URL", "https://api.example.com/api/v1") %>
 
 # Server configuration
 servers:
@@ -17,11 +29,16 @@ servers:
     options:
       "add-host": host.docker_hostname + ":host-gateway"
 
-# Registry configuration (optional - can use Docker Hub or private registry)
+# Registry configuration (Docker Hub or private registry)
 registry:
   username: <%= ENV.fetch("DOCKER_USERNAME", "") %>
   password: <%= ENV.fetch("DOCKER_PASSWORD", "") %>
   server: <%= ENV.fetch("DOCKER_REGISTRY", "docker.io") %>
+
+# SSL configuration (automatic Let's Encrypt)
+proxy:
+  ssl: true
+  host: <%= ENV.fetch("FRONTEND_HOST", "frontend.example.com") %>
 
 # Health check
 healthcheck:
@@ -30,15 +47,12 @@ healthcheck:
   max_attempts: 10
   interval: 10s
 
-# Environment variables
+# Environment variables (for runtime, though Vite vars are build-time)
 env:
   clear:
-    VITE_API_URL: <%= ENV.fetch("VITE_API_URL", "https://api.example.com/api/v1") %>
-
-# Build arguments
-builder:
-  dockerfile: Dockerfile
-  context: .
+    # Note: VITE_API_URL must be set at build time via builder.args
+    # This is here for reference/documentation
+    NODE_ENV: production
 
 # Labels
 labels:
