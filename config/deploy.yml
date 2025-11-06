@@ -1,0 +1,51 @@
+# Kamal deployment configuration for frontend
+# This deploys the React frontend as a static site served by Nginx
+
+service: microblog-frontend
+
+image: microblog-frontend
+
+# Build configuration
+builder:
+  arch: amd64
+
+# Server configuration
+servers:
+  web:
+    hosts:
+      - <%= ENV.fetch("FRONTEND_HOST", "frontend.example.com") %>
+    options:
+      "add-host": host.docker_hostname + ":host-gateway"
+
+# Registry configuration (optional - can use Docker Hub or private registry)
+registry:
+  username: <%= ENV.fetch("DOCKER_USERNAME", "") %>
+  password: <%= ENV.fetch("DOCKER_PASSWORD", "") %>
+  server: <%= ENV.fetch("DOCKER_REGISTRY", "docker.io") %>
+
+# Health check
+healthcheck:
+  path: /
+  port: 80
+  max_attempts: 10
+  interval: 10s
+
+# Environment variables
+env:
+  clear:
+    VITE_API_URL: <%= ENV.fetch("VITE_API_URL", "https://api.example.com/api/v1") %>
+
+# Build arguments
+builder:
+  dockerfile: Dockerfile
+  context: .
+
+# Labels
+labels:
+  service: microblog-frontend
+
+# Resource limits
+limits:
+  memory: 256m
+  cpus: 0.5
+
