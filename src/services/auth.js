@@ -11,9 +11,12 @@ export const authService = {
 
   async signup(userData) {
     const response = await api.post('/users', {
-      username: userData.username,
-      password: userData.password,
-      description: userData.description || '',
+      user: {
+        username: userData.username,
+        password: userData.password,
+        password_confirmation: userData.password,
+        description: userData.description || '',
+      },
     });
     return response.data;
   },
@@ -47,4 +50,5 @@ export const authService = {
     return localStorage.getItem('jwt_token');
   },
 };
+
 

@@ -18,9 +18,14 @@ export default function Signup() {
 
     try {
       await signup({ username, password, description });
+      // Wait a moment for state to update
+      await new Promise(resolve => setTimeout(resolve, 100));
       navigate('/');
     } catch (err) {
-      const errorMessage = err.response?.data?.error || err.response?.data?.errors?.join(', ') || 'Failed to create account. Please try again.';
+      const errorMessage = err.response?.data?.error
+        || err.response?.data?.errors?.join(', ')
+        || err.message
+        || 'Failed to create account. Please try again.';
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -102,4 +107,5 @@ export default function Signup() {
     </div>
   );
 }
+
 

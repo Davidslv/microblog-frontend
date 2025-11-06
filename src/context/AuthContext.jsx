@@ -45,10 +45,15 @@ export const AuthProvider = ({ children }) => {
     // After signup, automatically login
     if (data.user) {
       try {
-        await login(userData.username, userData.password);
+        const loginData = await authService.login(userData.username, userData.password);
+        setUser(loginData.user);
+        return loginData;
       } catch (error) {
         // If auto-login fails, user can login manually
         console.error('Auto-login after signup failed:', error);
+        // Still return signup data even if login fails
+        setUser(data.user);
+        return data;
       }
     }
     return data;
@@ -65,4 +70,5 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
 

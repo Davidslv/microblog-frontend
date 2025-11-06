@@ -19,7 +19,11 @@ export default function Login() {
       await login(username, password);
       navigate('/');
     } catch (err) {
-      setError(err.response?.data?.error || 'Invalid username or password');
+      const errorMessage = err.response?.data?.error
+        || err.response?.data?.message
+        || err.message
+        || 'Invalid username or password';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -84,4 +88,5 @@ export default function Login() {
     </div>
   );
 }
+
 
