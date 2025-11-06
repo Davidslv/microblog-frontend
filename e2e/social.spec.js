@@ -73,8 +73,8 @@ test.describe('Social Features', () => {
     await page.getByRole('button', { name: /login/i }).click();
     await expect(page).toHaveURL('/');
 
-    // Click on own username in navigation
-    await page.getByText('@testuser1').click();
+    // Click on own username in navigation (use navigation role to be specific)
+    await page.getByRole('navigation').getByText('@testuser1').click();
 
     // Should navigate to own profile
     await expect(page).toHaveURL(/\/users\/\d+/);
