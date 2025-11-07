@@ -25,7 +25,7 @@ builder:
 servers:
   web:
     hosts:
-      - <%= ENV.fetch("FRONTEND_HOST", "46.101.40.110") %>
+      - <%= ENV.fetch("FRONTEND_HOST", "microblog.davidslv.uk") %>
     # options:
     #   "add-host": host.docker_hostname + ":host-gateway"
 
@@ -38,10 +38,9 @@ registry:
 
 # SSL configuration (automatic Let's Encrypt)
 # Note: SSL only works with domain names, not IP addresses
-# To enable SSL, set FRONTEND_HOST to a domain name and uncomment ssl: true
 proxy:
-  # ssl: true  # Disabled for IP-based access. Enable when using a domain name.
-  host: <%= ENV.fetch("FRONTEND_HOST", "46.101.40.110") %>
+  ssl: true
+  host: <%= ENV.fetch("FRONTEND_HOST", "microblog.davidslv.uk") %>
 
 # Health check
 # healthcheck:

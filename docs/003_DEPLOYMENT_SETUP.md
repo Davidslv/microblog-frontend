@@ -466,9 +466,28 @@ The deployment process involves:
 
 ---
 
+## Post-Deployment: CORS Configuration
+
+**Important:** After deploying the frontend, ensure the backend is configured to allow CORS requests from your frontend domain.
+
+The backend requires the `FRONTEND_URL` environment variable to be set in its deployment configuration. Without it, all API calls from the frontend will be blocked by CORS.
+
+**Backend Configuration Required:**
+```yaml
+# In microblog-backend/config/deploy.yml
+env:
+  clear:
+    FRONTEND_URL: <%= ENV.fetch("FRONTEND_URL", "https://microblog.davidslv.uk") %>
+```
+
+**For detailed CORS troubleshooting, see:** `docs/004_CORS_TROUBLESHOOTING.md`
+
+---
+
 ## Additional Resources
 
 - [Kamal Documentation](https://kamal-deploy.org/)
 - [Docker Hub Access Tokens](https://docs.docker.com/docker-hub/access-tokens/)
 - [Kamal GitHub Repository](https://github.com/basecamp/kamal)
+- [CORS Troubleshooting Guide](004_CORS_TROUBLESHOOTING.md)
 
