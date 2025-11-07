@@ -40,3 +40,4 @@ build
 *.tsbuildinfo
 
 
+.kamal/secrets

@@ -2,15 +2,15 @@
 # This deploys the React frontend as a static site served by Nginx
 #
 # Usage:
-#   export FRONTEND_HOST=yourdomain.com
-#   export VITE_API_URL=https://api.yourdomain.com/api/v1
-#   export DOCKER_USERNAME=your-docker-username
-#   export DOCKER_PASSWORD=your-docker-password
+# export FRONTEND_HOST=microblog.yourdomain.com
+# export VITE_API_URL=https://microblog-be.davidslv.uk/api/v1
+# export DOCKER_USERNAME=davidslvuk
+# export DOCKER_PASSWORD=<your-docker-password-or-token>
 #   kamal deploy
 
 service: microblog-frontend
 
-image: microblog-frontend
+image: davidslvuk/microblog-frontend
 
 # Build configuration
 builder:
@@ -19,33 +19,34 @@ builder:
   context: .
   # Build args for Vite (embedded at build time)
   args:
-    VITE_API_URL: <%= ENV.fetch("VITE_API_URL", "https://api.example.com/api/v1") %>
+    VITE_API_URL: <%= ENV.fetch("VITE_API_URL", "http://206.189.19.73/api/v1") %>
 
 # Server configuration
 servers:
   web:
     hosts:
-      - <%= ENV.fetch("FRONTEND_HOST", "frontend.example.com") %>
-    options:
-      "add-host": host.docker_hostname + ":host-gateway"
+      - <%= ENV.fetch("FRONTEND_HOST", "46.101.40.110") %>
+    # options:
+    #   "add-host": host.docker_hostname + ":host-gateway"
 
 # Registry configuration (Docker Hub or private registry)
 registry:
-  username: <%= ENV.fetch("DOCKER_USERNAME", "") %>
-  password: <%= ENV.fetch("DOCKER_PASSWORD", "") %>
+  username: <%= ENV.fetch("DOCKER_USERNAME", "davidslvuk") %>
+  password:
+    - KAMAL_REGISTRY_PASSWORD
   server: <%= ENV.fetch("DOCKER_REGISTRY", "docker.io") %>
 
 # SSL configuration (automatic Let's Encrypt)
 proxy:
   ssl: true
-  host: <%= ENV.fetch("FRONTEND_HOST", "frontend.example.com") %>
+  host: <%= ENV.fetch("FRONTEND_HOST", "microblog.example.com") %>
 
 # Health check
-healthcheck:
-  path: /
-  port: 80
-  max_attempts: 10
-  interval: 10s
+# healthcheck:
+#   path: /
+#   port: 80
+#   max_attempts: 10
+#   interval: 10s
 
 # Environment variables (for runtime, though Vite vars are build-time)
 env:
@@ -59,8 +60,8 @@ labels:
   service: microblog-frontend
 
 # Resource limits
-limits:
-  memory: 256m
-  cpus: 0.5
+# limits:
+#   memory: 256m
+#   cpus: 0.5
 
 
