@@ -14,9 +14,21 @@ export default function PostList({ posts, loading, hasNext, onLoadMore }) {
     );
   }
 
+  // Filter out redacted posts (silent redaction - they should not appear)
+  // Backend should already filter them, but we add a safety check here
+  const visiblePosts = posts.filter(post => !post.redacted);
+
+  if (visiblePosts.length === 0) {
+    return (
+      <div className="text-center py-12 text-gray-500">
+        <p>No posts yet. Be the first to post!</p>
+      </div>
+    );
+  }
+
   return (
     <div>
-      {posts.map((post) => (
+      {visiblePosts.map((post) => (
         <Post key={post.id} post={post} />
       ))}
 

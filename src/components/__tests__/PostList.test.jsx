@@ -70,5 +70,26 @@ describe('PostList', () => {
     expect(posts[0]).toHaveTextContent('First post');
     expect(posts[1]).toHaveTextContent('Second post');
   });
+
+  it('should filter out redacted posts (silent redaction)', () => {
+    const postsWithRedacted = [
+      { id: 1, content: 'First post', author: { id: 1, username: 'user1' }, redacted: false },
+      { id: 2, content: 'Redacted post', author: { id: 2, username: 'user2' }, redacted: true },
+      { id: 3, content: 'Third post', author: { id: 3, username: 'user3' }, redacted: false },
+    ];
+    render(<PostList posts={postsWithRedacted} loading={false} hasNext={false} onLoadMore={vi.fn()} />);
+    expect(screen.getByTestId('post-1')).toBeInTheDocument();
+    expect(screen.queryByTestId('post-2')).not.toBeInTheDocument();
+    expect(screen.getByTestId('post-3')).toBeInTheDocument();
+  });
+
+  it('should show empty state when all posts are redacted', () => {
+    const redactedPosts = [
+      { id: 1, content: 'Redacted post 1', author: { id: 1, username: 'user1' }, redacted: true },
+      { id: 2, content: 'Redacted post 2', author: { id: 2, username: 'user2' }, redacted: true },
+    ];
+    render(<PostList posts={redactedPosts} loading={false} hasNext={false} onLoadMore={vi.fn()} />);
+    expect(screen.getByText('No posts yet. Be the first to post!')).toBeInTheDocument();
+  });
 });
 

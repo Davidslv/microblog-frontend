@@ -1,7 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import { formatDate } from '../utils/formatDate';
+import ReportButton from './ReportButton';
+import { useAuth } from '../context/AuthContext';
 
 export default function Post({ post }) {
+  const { user } = useAuth();
   const location = useLocation();
   if (!post) return null;
 
@@ -43,16 +46,21 @@ export default function Post({ post }) {
       </Link>
 
       <div className="flex items-center justify-between text-sm text-gray-500">
-        <Link
-          to={`/posts/${post.id}`}
-          className="hover:text-blue-600"
-        >
-          {post.replies_count > 0 ? (
-            <span>{post.replies_count} {post.replies_count === 1 ? 'reply' : 'replies'}</span>
-          ) : (
-            <span>Reply</span>
+        <div className="flex items-center space-x-4">
+          <Link
+            to={`/posts/${post.id}`}
+            className="hover:text-blue-600"
+          >
+            {post.replies_count > 0 ? (
+              <span>{post.replies_count} {post.replies_count === 1 ? 'reply' : 'replies'}</span>
+            ) : (
+              <span>Reply</span>
+            )}
+          </Link>
+          {user && user.id !== post.author.id && (
+            <ReportButton postId={post.id} />
           )}
-        </Link>
+        </div>
         {viewThreadUrl && (
           <Link
             to={viewThreadUrl}
