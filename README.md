@@ -67,6 +67,8 @@ The frontend communicates with the Rails API backend via REST endpoints using JW
 - ✅ User profiles with stats (posts, followers, following)
 - ✅ Follow/Unfollow users
 - ✅ Account settings (description, password, delete account)
+- ✅ Post moderation (report posts)
+- ✅ Silent redaction (redacted posts automatically hidden)
 - ✅ Cursor-based pagination
 - ✅ Responsive design with Tailwind CSS
 
@@ -373,8 +375,10 @@ microblog-frontend/
 │   │   ├── Post.jsx        # Individual post display
 │   │   ├── PostList.jsx    # List of posts with pagination
 │   │   ├── PostForm.jsx    # Create post/reply form
-│   │   ├── Navigation.jsx  # Navigation bar
-│   │   └── Loading.jsx     # Loading spinner
+│   │   ├── Navigation.jsx   # Navigation bar
+│   │   ├── Loading.jsx     # Loading spinner
+│   │   ├── ReportButton.jsx # Report post button
+│   │   └── ReportModal.jsx  # Report post modal
 │   ├── pages/              # Page-level components
 │   │   ├── Home.jsx        # Feed page with filters
 │   │   ├── Login.jsx       # Login page
@@ -386,7 +390,8 @@ microblog-frontend/
 │   │   ├── api.js          # Axios instance with interceptors
 │   │   ├── auth.js         # Authentication service
 │   │   ├── posts.js        # Posts API service
-│   │   └── users.js        # Users API service
+│   │   ├── users.js        # Users API service
+│   │   └── reports.js      # Reports API service
 │   ├── context/            # React Context providers
 │   │   └── AuthContext.jsx # Authentication context
 │   ├── utils/              # Utility functions
@@ -435,6 +440,7 @@ The frontend communicates with the Rails API using the following endpoints:
 - `GET /api/v1/posts` - Get posts feed (with filters: timeline, mine, following)
 - `POST /api/v1/posts` - Create post
 - `GET /api/v1/posts/:id` - Get post detail with replies
+- `POST /api/v1/posts/:id/report` - Report a post
 
 ### Users
 - `GET /api/v1/users/:id` - Get user profile
