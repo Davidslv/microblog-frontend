@@ -31,7 +31,7 @@ describe('Signup', () => {
 
   it('should render signup form', () => {
     renderWithRouter(<Signup />);
-    expect(screen.getByText('Sign Up')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Sign Up/i })).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Choose a username/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Choose a password/i)).toBeInTheDocument();
     expect(screen.getByPlaceholderText(/Tell us about yourself/i)).toBeInTheDocument();

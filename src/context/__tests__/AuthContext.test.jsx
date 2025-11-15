@@ -71,12 +71,12 @@ describe('AuthContext', () => {
     authService.getCurrentUser.mockResolvedValue({ id: 1, username: 'testuser' });
 
     renderWithProvider();
-    
+
     // Loading should disappear after checkAuth completes
     await waitFor(() => {
       expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
     }, { timeout: 1000 });
-    
+
     // Verify that getCurrentUser was not called when not authenticated
     expect(authService.getCurrentUser).not.toHaveBeenCalled();
   });

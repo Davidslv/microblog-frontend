@@ -9,24 +9,24 @@ vi.mock('../../context/AuthContext', () => ({
   useAuth: vi.fn(),
 }));
 
+const mockNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockNavigate,
+  };
+});
+
 const renderWithRouter = (component) => {
   return render(<BrowserRouter>{component}</BrowserRouter>);
 };
 
 describe('Navigation', () => {
   const mockLogout = vi.fn();
-  const mockNavigate = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Mock useNavigate
-    vi.mock('react-router-dom', async () => {
-      const actual = await vi.importActual('react-router-dom');
-      return {
-        ...actual,
-        useNavigate: () => mockNavigate,
-      };
-    });
   });
 
   it('should render navigation links when user is not authenticated', () => {

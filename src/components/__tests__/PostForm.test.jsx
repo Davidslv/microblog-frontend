@@ -67,15 +67,20 @@ describe('PostForm', () => {
     expect(submitButton).not.toBeDisabled();
   });
 
-  it('should disable submit button when content exceeds limit', async () => {
+  it('should disable submit button when content is at limit', async () => {
     const user = userEvent.setup();
     render(<PostForm onPostCreated={mockOnPostCreated} />);
 
     const textarea = screen.getByPlaceholderText(/What's on your mind/i);
-    const longText = 'a'.repeat(201);
+    const longText = 'a'.repeat(200); // At the limit
     await user.type(textarea, longText);
 
     const submitButton = screen.getByRole('button', { name: /Post/i });
+    // Button should be enabled when at limit (200 chars is valid)
+    expect(submitButton).not.toBeDisabled();
+    
+    // But should be disabled when empty
+    await user.clear(textarea);
     expect(submitButton).toBeDisabled();
   });
 
@@ -141,31 +146,41 @@ describe('PostForm', () => {
     });
   });
 
-  it('should show validation error for empty content', async () => {
+  it('should disable button for empty or whitespace-only content', async () => {
     const user = userEvent.setup();
     render(<PostForm onPostCreated={mockOnPostCreated} />);
 
     const textarea = screen.getByPlaceholderText(/What's on your mind/i);
-    await user.type(textarea, '   '); // Only whitespace
-    await user.click(screen.getByRole('button', { name: /Post/i }));
-
-    await waitFor(() => {
-      expect(screen.getByText('Post content cannot be empty')).toBeInTheDocument();
-    });
+    const submitButton = screen.getByRole('button', { name: /Post/i });
+    
+    // Button should be disabled when empty
+    expect(submitButton).toBeDisabled();
+    
+    // Type whitespace - button should still be disabled
+    await user.type(textarea, '   ');
+    expect(submitButton).toBeDisabled();
+    
+    // Type actual content - button should be enabled
+    await user.type(textarea, 'test');
+    expect(submitButton).not.toBeDisabled();
   });
 
-  it('should show validation error for content exceeding limit', async () => {
+  it('should allow content at the limit (200 characters)', async () => {
     const user = userEvent.setup();
+    postsService.createPost.mockResolvedValue({ post: { id: 1, content: 'a'.repeat(200) } });
     render(<PostForm onPostCreated={mockOnPostCreated} />);
 
     const textarea = screen.getByPlaceholderText(/What's on your mind/i);
-    const longText = 'a'.repeat(201);
-    await user.type(textarea, longText);
+    // maxLength prevents typing more than 200, so we test the limit
+    const validText = 'a'.repeat(200);
+    await user.type(textarea, validText);
     await user.click(screen.getByRole('button', { name: /Post/i }));
-
+    
+    // Should successfully submit (no error)
     await waitFor(() => {
-      expect(screen.getByText(/Post cannot exceed 200 characters/i)).toBeInTheDocument();
+      expect(postsService.createPost).toHaveBeenCalledWith(validText, null);
     });
+    expect(screen.queryByText(/Post cannot exceed 200 characters/i)).not.toBeInTheDocument();
   });
 
   it('should show reply mode when parentId is provided', () => {
