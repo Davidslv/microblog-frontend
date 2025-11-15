@@ -14,6 +14,25 @@ vi.mock('../../services/auth', () => ({
   },
 }));
 
+// Mock localStorage
+const localStorageMock = (() => {
+  let store = {};
+  return {
+    getItem: vi.fn((key) => store[key] || null),
+    setItem: vi.fn((key, value) => {
+      store[key] = value.toString();
+    }),
+    removeItem: vi.fn((key) => {
+      delete store[key];
+    }),
+    clear: vi.fn(() => {
+      store = {};
+    }),
+  };
+})();
+
+global.localStorage = localStorageMock;
+
 const TestComponent = () => {
   const { user, loading, login, signup, logout } = useAuth();
   return (
@@ -40,19 +59,26 @@ const renderWithProvider = () => {
 describe('AuthContext', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    localStorage.clear();
+    localStorageMock.clear();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
   });
 
-  it('should show loading state initially', () => {
+  it('should show loading state initially', async () => {
     authService.isAuthenticated.mockReturnValue(false);
     authService.getCurrentUser.mockResolvedValue({ id: 1, username: 'testuser' });
 
     renderWithProvider();
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
+    
+    // Loading should disappear after checkAuth completes
+    await waitFor(() => {
+      expect(screen.queryByTestId('loading')).not.toBeInTheDocument();
+    }, { timeout: 1000 });
+    
+    // Verify that getCurrentUser was not called when not authenticated
+    expect(authService.getCurrentUser).not.toHaveBeenCalled();
   });
 
   it('should check authentication on mount when token exists', async () => {

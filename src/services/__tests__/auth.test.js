@@ -95,9 +95,12 @@ describe('authService', () => {
       });
 
       expect(api.post).toHaveBeenCalledWith('/users', {
-        username: 'newuser',
-        password: 'password123',
-        description: 'Test user',
+        user: {
+          username: 'newuser',
+          password: 'password123',
+          password_confirmation: 'password123',
+          description: 'Test user',
+        },
       });
       expect(result).toEqual(mockResponse.data);
     });
@@ -116,9 +119,12 @@ describe('authService', () => {
       });
 
       expect(api.post).toHaveBeenCalledWith('/users', {
-        username: 'newuser',
-        password: 'password123',
-        description: '',
+        user: {
+          username: 'newuser',
+          password: 'password123',
+          password_confirmation: 'password123',
+          description: '',
+        },
       });
     });
   });
@@ -138,8 +144,10 @@ describe('authService', () => {
       localStorageMock.setItem('jwt_token', 'test-token');
       api.delete.mockRejectedValue(new Error('Network error'));
 
-      await authService.logout();
+      // The logout function will throw, but the finally block should still run
+      await expect(authService.logout()).rejects.toThrow('Network error');
 
+      expect(api.delete).toHaveBeenCalledWith('/logout');
       expect(localStorage.removeItem).toHaveBeenCalledWith('jwt_token');
     });
   });
