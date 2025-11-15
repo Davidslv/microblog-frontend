@@ -47,7 +47,7 @@ describe('ReportModal', () => {
 
   it('submits report successfully', async () => {
     reportsService.reportPost.mockResolvedValue({ message: 'Report submitted' });
-    
+
     render(<ReportModal postId={1} onClose={mockOnClose} onSuccess={mockOnSuccess} />);
     const submitButton = screen.getByText('Report');
     fireEvent.click(submitButton);
@@ -116,7 +116,7 @@ describe('ReportModal', () => {
     render(<ReportModal postId={1} onClose={mockOnClose} onSuccess={mockOnSuccess} />);
     const submitButton = screen.getByText('Report');
     const cancelButton = screen.getByText('Cancel');
-    
+
     fireEvent.click(submitButton);
 
     expect(submitButton).toBeDisabled();
