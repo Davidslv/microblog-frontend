@@ -2,15 +2,15 @@
 # This deploys the React frontend as a static site served by Nginx
 #
 # Usage:
-# export FRONTEND_HOST=microblog.yourdomain.com
-# export VITE_API_URL=https://microblog-be.davidslv.uk/api/v1
-# export DOCKER_USERNAME=davidslvuk
+# export FRONTEND_HOST=your-frontend-domain.com
+# export VITE_API_URL=https://your-backend-domain.com/api/v1
+# export DOCKER_USERNAME=your-dockerhub-username
 # export DOCKER_PASSWORD=<your-docker-password-or-token>
 #   kamal deploy
 
 service: microblog-frontend
 
-image: davidslvuk/microblog-frontend
+image: <%= ENV.fetch("DOCKER_USERNAME", "your-dockerhub-username") %>/microblog-frontend
 
 # Build configuration
 builder:
@@ -19,19 +19,19 @@ builder:
   context: .
   # Build args for Vite (embedded at build time)
   args:
-    VITE_API_URL: <%= ENV.fetch("VITE_API_URL", "http://206.189.19.73/api/v1") %>
+    VITE_API_URL: <%= ENV.fetch("VITE_API_URL", "https://your-backend-domain.com/api/v1") %>
 
 # Server configuration
 servers:
   web:
     hosts:
-      - <%= ENV.fetch("FRONTEND_HOST", "microblog.davidslv.uk") %>
+      - <%= ENV.fetch("FRONTEND_HOST", "your-frontend-domain.com") %>
     # options:
     #   "add-host": host.docker_hostname + ":host-gateway"
 
 # Registry configuration (Docker Hub or private registry)
 registry:
-  username: <%= ENV.fetch("DOCKER_USERNAME", "davidslvuk") %>
+  username: <%= ENV.fetch("DOCKER_USERNAME", "your-dockerhub-username") %>
   password:
     - KAMAL_REGISTRY_PASSWORD
   server: <%= ENV.fetch("DOCKER_REGISTRY", "docker.io") %>
@@ -40,7 +40,7 @@ registry:
 # Note: SSL only works with domain names, not IP addresses
 proxy:
   ssl: true
-  host: <%= ENV.fetch("FRONTEND_HOST", "microblog.davidslv.uk") %>
+  host: <%= ENV.fetch("FRONTEND_HOST", "your-frontend-domain.com") %>
 
 # Health check
 # healthcheck:

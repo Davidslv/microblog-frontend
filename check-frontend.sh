@@ -2,7 +2,7 @@
 # Frontend Diagnostic Script
 # This script checks if the frontend is properly deployed and accessible
 
-FRONTEND_HOST="${FRONTEND_HOST:-46.101.40.110}"
+FRONTEND_HOST="${FRONTEND_HOST:-your-frontend-host-or-ip}"
 
 echo "=== Frontend Diagnostic Check ==="
 echo ""
@@ -63,7 +63,7 @@ fi
 
 echo ""
 echo "6. Testing backend API connectivity..."
-BACKEND_URL="https://microblog-be.davidslv.uk/api/v1/health"
+BACKEND_URL="${BACKEND_URL:-https://your-backend-domain.com/api/v1/health}"
 BACKEND_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 5 "$BACKEND_URL" 2>/dev/null || echo "000")
 if [ "$BACKEND_STATUS" = "200" ]; then
     echo "   ✓ Backend API is accessible"
@@ -84,6 +84,8 @@ echo "3. Check the Network tab to see if assets are loading"
 echo "4. Look for CORS errors or API connection failures"
 echo ""
 echo "To view the frontend, open: http://$FRONTEND_HOST"
+
+
 
 
 
