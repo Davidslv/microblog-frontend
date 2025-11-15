@@ -1,5 +1,4 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import axios from 'axios';
 
 const mockRequestUse = vi.fn();
 const mockResponseUse = vi.fn();
