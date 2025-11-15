@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { usersService } from '../services/users';
@@ -16,11 +16,7 @@ export default function UserProfile() {
   const [following, setFollowing] = useState(false);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadUser();
-  }, [id]);
-
-  const loadUser = async () => {
+  const loadUser = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
@@ -39,7 +35,11 @@ export default function UserProfile() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
 
   const handleFollow = async () => {
     if (!currentUser) return;

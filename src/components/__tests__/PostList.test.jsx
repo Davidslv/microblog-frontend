@@ -2,8 +2,6 @@ import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import PostList from '../PostList';
-import Post from '../Post';
-import Loading from '../Loading';
 
 vi.mock('../Post', () => ({
   default: vi.fn(({ post }) => <div data-testid={`post-${post.id}`}>{post.content}</div>),

@@ -195,7 +195,7 @@ export default function Settings() {
         <div className="bg-red-50 border border-red-200 rounded-lg p-6">
           <h2 className="text-xl font-bold text-red-900 mb-2">Danger Zone</h2>
           <p className="text-red-800 mb-4">
-            Once you delete your account, there is no going back. Your posts will remain but will show as "Deleted User".
+            Once you delete your account, there is no going back. Your posts will remain but will show as &quot;Deleted User&quot;.
           </p>
           <button
             onClick={handleDelete}

@@ -32,7 +32,7 @@ export default function ReportModal({ postId, onClose, onSuccess }) {
           <div className="text-center">
             <div className="text-green-600 text-4xl mb-4">✓</div>
             <h2 className="text-xl font-semibold mb-2">Report Submitted</h2>
-            <p className="text-gray-600 mb-4">Thank you for your report. We'll review it shortly.</p>
+            <p className="text-gray-600 mb-4">Thank you for your report. We&apos;ll review it shortly.</p>
           </div>
         </div>
       </div>

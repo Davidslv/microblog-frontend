@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { postsService } from '../services/posts';
 import PostList from '../components/PostList';
@@ -13,11 +13,7 @@ export default function Home() {
   const [filter, setFilter] = useState('timeline');
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    loadPosts();
-  }, [filter, user]);
-
-  const loadPosts = async (nextCursor = null) => {
+  const loadPosts = useCallback(async (nextCursor = null) => {
     try {
       setLoading(true);
       setError(null);
@@ -37,7 +33,11 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [filter]);
+
+  useEffect(() => {
+    loadPosts();
+  }, [loadPosts, user]);
 
   const handleLoadMore = () => {
     if (hasNext && cursor) {

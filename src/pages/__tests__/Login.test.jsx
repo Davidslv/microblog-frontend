@@ -23,7 +23,6 @@ const renderWithRouter = (component) => {
 
 describe('Login', () => {
   const mockLogin = vi.fn();
-  const mockNavigate = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();

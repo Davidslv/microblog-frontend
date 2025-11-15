@@ -35,7 +35,7 @@ describe('api', () => {
 
     // Re-import to get new config
     vi.resetModules();
-    const newApi = require('../api').default;
+    require('../api').default;
 
     expect(axios.create).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -51,7 +51,7 @@ describe('api', () => {
     delete import.meta.env.VITE_API_URL;
 
     vi.resetModules();
-    const newApi = require('../api').default;
+    require('../api').default;
 
     expect(axios.create).toHaveBeenCalledWith(
       expect.objectContaining({

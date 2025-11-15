@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect } from 'react';
 import { authService } from '../services/auth';
 
@@ -22,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         try {
           const currentUser = await authService.getCurrentUser();
           setUser(currentUser);
-        } catch (error) {
+        } catch {
           // Token invalid, clear it
           localStorage.removeItem('jwt_token');
           setUser(null);
