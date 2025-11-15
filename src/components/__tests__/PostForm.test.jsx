@@ -78,7 +78,7 @@ describe('PostForm', () => {
     const submitButton = screen.getByRole('button', { name: /Post/i });
     // Button should be enabled when at limit (200 chars is valid)
     expect(submitButton).not.toBeDisabled();
-    
+
     // But should be disabled when empty
     await user.clear(textarea);
     expect(submitButton).toBeDisabled();
@@ -152,14 +152,14 @@ describe('PostForm', () => {
 
     const textarea = screen.getByPlaceholderText(/What's on your mind/i);
     const submitButton = screen.getByRole('button', { name: /Post/i });
-    
+
     // Button should be disabled when empty
     expect(submitButton).toBeDisabled();
-    
+
     // Type whitespace - button should still be disabled
     await user.type(textarea, '   ');
     expect(submitButton).toBeDisabled();
-    
+
     // Type actual content - button should be enabled
     await user.type(textarea, 'test');
     expect(submitButton).not.toBeDisabled();
@@ -175,7 +175,7 @@ describe('PostForm', () => {
     const validText = 'a'.repeat(200);
     await user.type(textarea, validText);
     await user.click(screen.getByRole('button', { name: /Post/i }));
-    
+
     // Should successfully submit (no error)
     await waitFor(() => {
       expect(postsService.createPost).toHaveBeenCalledWith(validText, null);

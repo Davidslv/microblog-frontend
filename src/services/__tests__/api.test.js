@@ -30,7 +30,7 @@ vi.mock('../api', async () => {
     },
     withCredentials: true,
   });
-  
+
   // Add interceptors
   mockApi.interceptors.request.use(
     vi.fn((config) => config),
@@ -40,7 +40,7 @@ vi.mock('../api', async () => {
     vi.fn((response) => response),
     vi.fn((error) => Promise.reject(error))
   );
-  
+
   return { default: mockApi };
 });
 
